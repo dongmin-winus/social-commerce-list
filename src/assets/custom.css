@@ -1,0 +1,8 @@
+.option-default {
+    @apply cursor-auto;
+  }
+
+  .option-default li:nth-child(-n+3) {
+    /* background: rgb(254, 159, 224) */
+    @apply bg-pink-300;
+  }
