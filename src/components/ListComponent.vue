@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container mx-auto">
+    <div class="container mx-auto pb-8">
       <div
         class="ml-4 mt-6 relative text-bold text-xl text-bold border border-b-gray-200 border-white"
       >
