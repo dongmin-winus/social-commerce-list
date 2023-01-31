@@ -62,11 +62,6 @@ const state = {
       content: "간단한 글 내용입니다.",
       date_at: "2023-01-14",
     },
-  ],
-  meetings: [
-
-  ],
-  photos: [
     {
       id: 9,
       title: "9 대한민국을 응원합니다!",
@@ -109,6 +104,12 @@ const state = {
       content: "간단한 글 내용입니다.",
       date_at: "2023-01-14",
     },
+  ],
+  meetings: [
+
+  ],
+  photos: [
+
   ],
 };
 

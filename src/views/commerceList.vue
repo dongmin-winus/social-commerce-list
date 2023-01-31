@@ -9,7 +9,9 @@
       @updateList="updateList"
       @deleteOne="deleteOne"
     />
-    <div class="flex flex-row sticky bottom-0">
+    <div 
+      class="flex flex-row  bottom-0 fixed inset-x-0"
+    >
       <button
           class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-2 px-4 w-2/3"
         >
