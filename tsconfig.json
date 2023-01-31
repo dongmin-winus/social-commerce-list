@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false, 
+  },
+  "paths": {
+    "@/*": [
+      "src/*"
+    ]
+  },
+  "allowJs": true,
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

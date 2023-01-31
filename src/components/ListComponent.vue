@@ -1,28 +1,27 @@
 <template>
   <div>
     <div class="container mx-auto">
-      <!-- 1 -->
       <div
         class="ml-4 mt-6 relative text-bold text-xl text-bold border border-b-gray-200 border-white"
       >
         <div> {{ title }} </div>
-        
       </div>
       <div v-show="subtitle" class="ml-4 pb-2 text-sm"> {{ subtitle }} </div>
+
+      <!-- TODO 디폴트 화면 필요함 스팬 대신으로 -->
       <span
         v-show="this.value.length === 0"
         class="m-6 relative pb-2 border border-b-gray-200 border-white"
       >
         콘텐츠가 없습니다.
       </span>
-      <div class="flex m-4">
+      <div class="flex m-4" v-show="select && this.value.length !== 0">
         <input 
           class="mr-2" 
           type="checkbox"
-          v-show="select"
           value="all" 
           v-model="allSelected"
-          @change="emitEvent('updateSelected',selectedRows)"
+          @change="$emit('updateSelected',selectedRows)"
         />
         <label for="all" class="text-base">전체</label>
       </div>
@@ -36,7 +35,7 @@
                 v-model="selectedRows"
                 :value="row.id"
                 :id="row.id"
-                @change="emitEvent('updateSelected',selectedRows)"
+                @change="$emit('updateSelected',selectedRows)"
               >
             </div>
             <div class="flex-shrink-0 sm:mb-0 mr-4">
@@ -49,14 +48,15 @@
               <p class="text-md text-gray-800 font-semibold mt-1 p-0">
                 {{ row.title }}
               </p>
-              <!-- <div class="right-0 text-gray-800 text-sm">
+              <div class="right-0 text-gray-800 text-sm">
                 {{ row.date_at }}
-              </div> -->
+              </div>
             </div>
             <transition name="slide">
               <div class="absolute right-0 mr-1 mt-4">
                 <button
                   class="bg-gray-300 focus:bg-red-300 text-white font-bold w-18 h-9 py-2 px-2 rounded"
+                  @click="handleClick($event,row)"
                 >
                   ...
                 </button>
@@ -65,24 +65,32 @@
           </div>
         </li>
       </transition-group>
-      <div class="flex m-4">
+      <div class="flex m-4" v-show="select && this.value.length !== 0">
         <input 
           class="mr-2" 
           type="checkbox"
-          v-show="select"
           value="all" 
           v-model="allSelected"
-          @change="emitEvent('updateSelected',selectedRows)"
+          @change="$emit('updateSelected',selectedRows)"
         />
         <label for="all" class="text-base">전체</label>
       </div>
     </div>
+
+    <VueSimpleContextMenu 
+      element-id="threeDotMenu"
+      :options="options"
+      ref="contextMenu"
+      @option-clicked="optionClicked"
+    />
   </div>
 </template>
 
 <script>
+import VueSimpleContextMenu from 'vue-simple-context-menu'
 export default {
   components: {
+    VueSimpleContextMenu
   },
   props: {
     title: {
@@ -136,15 +144,75 @@ export default {
       slowDown: false,
       drag: false,
       selectedRows:[],
+      options: [
+        {
+          name: '한 줄 위로 이동',
+          slug: 'one-line-up',
+        },
+        {
+          name: '한 줄 아래로 이동',
+          slug: 'one-line-down',
+        },
+        {
+          name: '가장 위로 이동',
+          slug: 'top-up',
+        },
+        {
+          name: '가장 아래로 이동',
+          slug: 'bottom-down',
+        },
+        {
+          name: '삭제',
+          slug: 'remove',
+        },
+      ],
     };
   },
   methods: {
-    emitEvent(eventName, item = undefined) {
-      this.$emit(
-        eventName,
-        item
-      );
+    handleClick(event,item) {
+      this.$refs.contextMenu.showMenu(event, item);
     },
+    optionClicked(event) {
+      let newList = this.value;
+      const targetIdx = this.value.findIndex(e => e.id === event.item.id);
+      if((event.option.slug == 'one-line-up' || event.option.slog == 'top-up') && targetIdx < 1 ) {
+        //TODO 모달로 변경
+        alert("현재 제일 위에 있습니다.")
+        return;
+      }
+      if((event.option.slug == 'one-line-down' || event.option.slog == 'bottom-down') && targetIdx === this.value.length-1) {
+        alert("현재 제일 아래에 있습니다.")
+        return;
+      }      
+      switch(event.option.slug) {
+        case 'one-line-up':
+          [newList[targetIdx - 1],newList[targetIdx]]  = [newList[targetIdx],newList[targetIdx - 1]];
+          this.$emit('updateList',newList)
+          break;
+        case 'one-line-down':
+          [newList[targetIdx],newList[targetIdx + 1]]  = [newList[targetIdx + 1],newList[targetIdx]];
+          this.$emit('updateList',newList)
+          break;
+        case 'top-up':
+          newList = [
+            this.value[targetIdx],
+            ...this.value.filter((e,index) => index !== targetIdx)
+          ];
+          this.$emit('updateList',newList)
+          break;
+        case 'bottom-down':
+          newList = [
+            ...this.value.filter((e,index) => index !== targetIdx),
+            this.value[targetIdx]
+          ];
+          this.$emit('updateList',newList)
+          break;
+        case 'remove':
+          this.$emit$emit('deleteOne', this.value[targetIdx].id);
+          break;
+      }
+    },
+
   },
 };
 </script>

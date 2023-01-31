@@ -4,6 +4,8 @@ import { router } from "./router/index.js";
 import { store } from "./store/index.js";
 import "./assets/tailwind.css"
 
+import 'vue-simple-context-menu/dist/vue-simple-context-menu.css'
+
 Vue.config.productionTip = false
 
 new Vue({

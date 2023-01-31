@@ -6,6 +6,8 @@
       :select='true'
       v-model="news"
       @updateSelected="updateSelected"
+      @updateList="updateList"
+      @deleteOne="deleteOne"
     />
     <div class="flex flex-row sticky bottom-0">
       <button
@@ -100,12 +102,19 @@ export default {
     unselectAll() {
       this.selectedRows = [];
     },
+    deleteOne(id) {
+      this.news = this.news.filter(item => id !== item.id);
+    },
     deleteSelected() {
       this.news = this.news.filter(
         (item) => !this.selectedRows.includes(item.id)
       );
       this.selectedRows = [];
     },
+    updateList(newList) {
+      console.log({newList})
+      this.news = [...newList];
+    }
 
   },
 };
