@@ -15,7 +15,7 @@
       >
         콘텐츠가 없습니다.
       </span>
-      <div class="flex m-4" v-show="select && this.value.length !== 0">
+      <div class="flex ml-2 m-4" v-show="select && this.value.length !== 0">
         <input 
           class="mr-2" 
           type="checkbox"
@@ -27,8 +27,8 @@
       </div>
       <transition-group tag="ul" type="transition" :name="'list'">
         <li class="option-default" v-for="row in realValue" :key="row.id">
-          <div class="flex m-4">
-            <div class="mt-4 mr-2">
+          <div class="flex p-2 border border-b-gray-200 border-white ">
+            <div class="mt-6 mr-4">
               <input 
                 v-show="select" 
                 type="checkbox" 
@@ -65,7 +65,7 @@
           </div>
         </li>
       </transition-group>
-      <div class="flex m-4" v-show="select && this.value.length !== 0">
+      <div class="flex ml-2 m-4" v-show="select && this.value.length !== 0">
         <input 
           class="mr-2" 
           type="checkbox"
@@ -208,7 +208,7 @@ export default {
           this.$emit('updateList',newList)
           break;
         case 'remove':
-          this.$emit$emit('deleteOne', this.value[targetIdx].id);
+          this.$emit('deleteOne', this.value[targetIdx].id);
           break;
       }
     },
