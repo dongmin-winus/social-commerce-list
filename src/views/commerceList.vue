@@ -14,6 +14,7 @@
     >
       <button
           class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-2 px-4 w-2/3"
+          @click="sendKakaoList"
         >
           공유하기
         </button>
@@ -45,6 +46,8 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import ListComponent from "../components/ListComponent.vue";
+const WEB_URL = process.env.VUE_APP_WEB_URL;
+const MOBILE_URL = process.env.VUE_APP_MOBILE_URL;
 export default {
   components: {
     ListComponent,
@@ -116,7 +119,47 @@ export default {
     updateList(newList) {
       console.log({newList})
       this.news = [...newList];
-    }
+    },
+    /**
+     * 카카오 공유하기 리스트
+     */
+    sendKakaoList() {
+      const content = this.news;
+      if (content.length < 2) {
+        alert("리스트 공유시 2개 이상의 콘텐츠가 필요합니다.");
+        return;
+      }
+      const listContents = content.slice(0, 3).map((item) => ({
+        title: item.title,
+        description: item.date_at,
+        imageUrl: "https://picsum.photos/200/300",
+        link: {
+          mobileWebUrl: `${MOBILE_URL}/myWallet`,
+          webUrl: `${WEB_URL}/myWallet`,
+        },
+      }));
+      window.Kakao.Share.sendDefault({
+        objectType: "list",
+        headerTitle: "자유마을 소식",
+        headerLink: {
+          mobileWebUrl: `${MOBILE_URL}/myWallet`,
+          webUrl: `${WEB_URL}/myWallet`,
+        },
+        contents: [...listContents],
+        buttons: [
+          {
+            title: "자세히 보기",
+            link: {
+              mobileWebUrl: `${MOBILE_URL}/myWallet`,
+              webUrl: `${WEB_URL}/myWallet`,
+            },
+          },
+        ],
+        serverCallbackArgs: {
+          freetownId: "emthrology",
+        },
+      });
+    },
 
   },
 };
