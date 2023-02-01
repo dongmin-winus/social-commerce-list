@@ -114,11 +114,11 @@ export default {
       this.news = this.news.filter(
         (item) => !this.selectedRows.includes(item.id)
       );
-      this.selectedRows = [];
+      this.unselectAll();
     },
     updateList(newList) {
-      console.log({newList})
       this.news = [...newList];
+      this.unselectAll();
     },
     /**
      * 카카오 공유하기 리스트

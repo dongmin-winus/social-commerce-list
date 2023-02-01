@@ -208,11 +208,19 @@ export default {
           this.$emit('updateList',newList)
           break;
         case 'remove':
-          this.$emit('deleteOne', this.value[targetIdx].id);
+          this.handleDelete(this.value[targetIdx].id, this.selectedRows);
+          // this.$emit('deleteOne', this.value[targetIdx].id);
           break;
       }
     },
-
+    handleDelete(targetId, selectedRows = []) {
+      if(selectedRows.length == 0) {
+        this.$emit('deleteOne', targetId);
+        return;
+      }
+      const newList = this.value.filter(item => !this.selectedRows.includes(item.id))
+      this.$emit('updateList',newList);
+    }
   },
 };
 </script>
